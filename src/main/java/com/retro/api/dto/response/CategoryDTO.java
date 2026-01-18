@@ -2,11 +2,16 @@ package com.retro.api.dto.response;
 
 import com.retro.api.entity.Category;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.UUID;
 
+@Setter
+@Getter
 @AllArgsConstructor
-public class CategoryDTO {
+public class CategoryDTO implements Serializable {
     private UUID id;
     private String name;
     private String slug;
