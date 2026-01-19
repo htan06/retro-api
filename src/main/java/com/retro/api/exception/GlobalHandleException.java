@@ -1,6 +1,6 @@
 package com.retro.api.exception;
 
-import com.retro.api.dto.response.ErrResponse;
+import com.retro.api.dto.api.ErrResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;

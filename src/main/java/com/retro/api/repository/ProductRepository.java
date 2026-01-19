@@ -1,7 +1,7 @@
 package com.retro.api.repository;
 
 import com.retro.api.entity.Product;
-import com.retro.api.entity.ProductState;
+import com.retro.api.entity.enums.ProductState;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

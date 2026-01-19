@@ -1,8 +1,8 @@
 package com.retro.api.service;
 
-import com.retro.api.dto.request.CreateCategoryDTO;
-import com.retro.api.dto.request.UpdateCategoryInfoDTO;
-import com.retro.api.dto.response.CategoryDTO;
+import com.retro.api.dto.category.request.CreateCategoryDTO;
+import com.retro.api.dto.category.request.UpdateCategoryInfoDTO;
+import com.retro.api.dto.category.response.CategoryDTO;
 
 import java.util.List;
 

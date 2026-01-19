@@ -1,8 +1,8 @@
 package com.retro.api.service;
 
-import com.retro.api.dto.request.CreateBrandDTO;
-import com.retro.api.dto.request.UpdateBrandInfoDTO;
-import com.retro.api.dto.response.BrandDTO;
+import com.retro.api.dto.brand.request.CreateBrandDTO;
+import com.retro.api.dto.brand.request.UpdateBrandInfoDTO;
+import com.retro.api.dto.brand.response.BrandDTO;
 
 import java.util.List;
 

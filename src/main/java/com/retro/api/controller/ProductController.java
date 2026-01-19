@@ -1,13 +1,14 @@
 package com.retro.api.controller;
 
-import com.retro.api.dto.request.*;
-import com.retro.api.dto.response.ApiResponse;
-import com.retro.api.dto.response.ProductDetailsDTO;
-import com.retro.api.dto.response.ProductOverviewDTO;
+import com.retro.api.dto.product.request.*;
+import com.retro.api.dto.api.ApiResponse;
+import com.retro.api.dto.product.response.ProductDetailsDTO;
+import com.retro.api.dto.product.response.ProductOverviewDTO;
 import com.retro.api.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -21,6 +22,7 @@ public class ProductController {
 
     private final ProductService productService;
 
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<ProductDetailsDTO> createProduct(@RequestBody @Valid CreateProductDTO createProduct) {
@@ -34,7 +36,7 @@ public class ProductController {
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<List<ProductOverviewDTO>> getListProduct() {
+    public ApiResponse<List<ProductOverviewDTO>> getListProductOverview() {
         return ApiResponse.<List<ProductOverviewDTO>>builder()
                 .statusCode(200)
                 .message("Successfully")
@@ -54,6 +56,7 @@ public class ProductController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     @PatchMapping("/{id}/update-info")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ApiResponse<ProductDetailsDTO> updateProductInfo(
@@ -68,6 +71,7 @@ public class ProductController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PatchMapping("/{id}/add-rating")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ApiResponse<ProductDetailsDTO> addRating(
@@ -82,6 +86,7 @@ public class ProductController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     @PatchMapping("/{id}/update-sale-price")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ApiResponse<ProductDetailsDTO> updateSalePrice(
@@ -96,6 +101,7 @@ public class ProductController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     @PatchMapping("/{id}/update-state")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ApiResponse<ProductDetailsDTO> updateState(
@@ -110,6 +116,7 @@ public class ProductController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ApiResponse<ProductDetailsDTO> deleteProduct(@PathVariable UUID id) {

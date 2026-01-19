@@ -1,5 +1,6 @@
 package com.retro.api.entity;
 
+import com.retro.api.entity.enums.ProductState;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -63,16 +64,11 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private Set<ProductImage> productImages;
 
-    @Column(name = "is_delete")
-    private boolean isDelete;
-
     public double calAverageRating() {
         return (reviewCount == 0) ? 0 : totalRating.floatValue() / reviewCount;
     }
 
     public void addRating(int rating) {
-        //condition
-
         this.totalRating += rating;
         this.reviewCount++;
     }

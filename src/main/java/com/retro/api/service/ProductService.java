@@ -1,8 +1,8 @@
 package com.retro.api.service;
 
-import com.retro.api.dto.request.*;
-import com.retro.api.dto.response.ProductDetailsDTO;
-import com.retro.api.dto.response.ProductOverviewDTO;
+import com.retro.api.dto.product.request.*;
+import com.retro.api.dto.product.response.ProductDetailsDTO;
+import com.retro.api.dto.product.response.ProductOverviewDTO;
 
 import java.util.List;
 import java.util.UUID;

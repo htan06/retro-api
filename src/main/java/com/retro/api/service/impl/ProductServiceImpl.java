@@ -1,9 +1,10 @@
 package com.retro.api.service.impl;
 
-import com.retro.api.dto.request.*;
-import com.retro.api.dto.response.ProductDetailsDTO;
-import com.retro.api.dto.response.ProductOverviewDTO;
+import com.retro.api.dto.product.request.*;
+import com.retro.api.dto.product.response.ProductDetailsDTO;
+import com.retro.api.dto.product.response.ProductOverviewDTO;
 import com.retro.api.entity.*;
+import com.retro.api.entity.enums.ProductState;
 import com.retro.api.exception.CatalogException;
 import com.retro.api.exception.CatalogExceptionEnum;
 import com.retro.api.repository.BrandRepository;
@@ -11,7 +12,6 @@ import com.retro.api.repository.CategoryRepository;
 import com.retro.api.repository.ProductRepository;
 import com.retro.api.service.ProductService;
 import com.retro.api.utils.CreateSlug;
-import jakarta.persistence.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
