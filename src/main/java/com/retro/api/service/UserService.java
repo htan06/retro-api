@@ -6,7 +6,7 @@ import com.retro.api.dto.user.response.UserInfoDTO;
 import java.util.UUID;
 
 public interface UserService {
-    UserInfoDTO getUserInfo(UUID id);
+    UserInfoDTO getUserInfo(String username);
 
-    UserInfoDTO updateUserInfo(UUID id, UpdateUserInfoDTO updateUserInfo);
+    UserInfoDTO updateUserInfo(String username, UpdateUserInfoDTO updateUserInfo);
 }

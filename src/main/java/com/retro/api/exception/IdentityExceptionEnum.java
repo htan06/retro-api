@@ -2,7 +2,8 @@ package com.retro.api.exception;
 
 public enum IdentityExceptionEnum {
     USER_NOT_FOUND("User not found"),
-    ROLE_NOT_FOUND("Role not found");
+    ROLE_NOT_FOUND("Role not found"),
+    CURRENT_PASSWORD_IS_INCORRECT("Current password is incorrect");
 
     private String message;
 

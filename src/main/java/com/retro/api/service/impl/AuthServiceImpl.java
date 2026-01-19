@@ -81,8 +81,21 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserInfoDTO changePassword(ChangePasswordDTO changePassword) {
-        return null;
+    public UserInfoDTO changePassword(String username, ChangePasswordDTO changePassword) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IdentityException(IdentityExceptionEnum.USER_NOT_FOUND));
+
+        boolean matchCurrentPassword = passwordEncoder.matches(changePassword.getCurrentPassword(), user.getPassword());
+
+        if (matchCurrentPassword) {
+            user.setPassword(passwordEncoder.encode(changePassword.getNewPassword()));
+        } else {
+            throw new IdentityException(IdentityExceptionEnum.CURRENT_PASSWORD_IS_INCORRECT);
+        }
+
+        return UserInfoDTO.from(
+                userRepository.save(user)
+        );
     }
 
     @Override

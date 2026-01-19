@@ -4,12 +4,15 @@ import com.retro.api.dto.api.ApiResponse;
 import com.retro.api.dto.auth.request.UserLoginDTO;
 import com.retro.api.dto.auth.request.UserRegisterDTO;
 import com.retro.api.dto.auth.response.UserLoginResponseDTO;
+import com.retro.api.dto.user.request.ChangePasswordDTO;
+import com.retro.api.dto.user.response.UserInfoDTO;
 import com.retro.api.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Date;
 
 @RestController
@@ -44,5 +47,19 @@ public class AuthController {
                 .timestamp(new Date())
                 .data(response)
                 .build();
+    }
+
+    @PatchMapping("/change-password")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<UserInfoDTO> changePassword(Principal principal, @RequestBody @Valid ChangePasswordDTO changePassword) {
+        UserInfoDTO info = authService.changePassword(principal.getName(), changePassword);
+
+        return ApiResponse.<UserInfoDTO>builder()
+                .statusCode(200)
+                .message("Successfully")
+                .timestamp(new Date())
+                .data(info)
+                .build();
+
     }
 }
