@@ -14,13 +14,13 @@ public interface ProductService {
 
     List<ProductOverviewDTO> getListProductOverview();
 
-    ProductDetailsDTO updateProductInfo(UpdateProductInfoDTO updateProductInfo);
+    ProductDetailsDTO updateProductInfo(UUID id, UpdateProductInfoDTO updateProductInfo);
 
-    ProductDetailsDTO addRating(AddRatingProductDTO addRatingProduct);
+    ProductDetailsDTO addRating(UUID id, AddRatingProductDTO addRatingProduct);
 
-    ProductDetailsDTO updatePrice(UpdateProductPriceDTO updateProductPrice);
+    ProductDetailsDTO updateSalePrice(UUID id, UpdateProductPriceDTO updateProductPrice);
 
-    ProductDetailsDTO updateState(UpdateProductStateDTO updateProductState);
+    ProductDetailsDTO updateState(UUID id, UpdateProductStateDTO updateProductState);
 
     void deleteProduct(UUID id);
 }

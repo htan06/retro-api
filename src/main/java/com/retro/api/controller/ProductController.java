@@ -1,17 +1,18 @@
 package com.retro.api.controller;
 
-import com.retro.api.dto.request.CreateProductDTO;
+import com.retro.api.dto.request.*;
 import com.retro.api.dto.response.ApiResponse;
 import com.retro.api.dto.response.ProductDetailsDTO;
+import com.retro.api.dto.response.ProductOverviewDTO;
 import com.retro.api.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -21,12 +22,103 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<ProductDetailsDTO> createProduct(@RequestBody @Valid CreateProductDTO createProduct) {
         return ApiResponse.<ProductDetailsDTO>builder()
                 .statusCode(201)
                 .message("Successfully")
                 .timestamp(new Date())
                 .data(productService.createProduct(createProduct))
+                .build();
+    }
+
+    @GetMapping("/")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<List<ProductOverviewDTO>> getListProduct() {
+        return ApiResponse.<List<ProductOverviewDTO>>builder()
+                .statusCode(200)
+                .message("Successfully")
+                .timestamp(new Date())
+                .data(productService.getListProductOverview())
+                .build();
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<ProductDetailsDTO> getProductDetails(@PathVariable UUID id) {
+        return ApiResponse.<ProductDetailsDTO>builder()
+                .statusCode(200)
+                .message("Successfully")
+                .timestamp(new Date())
+                .data(productService.getProductDetails(id))
+                .build();
+    }
+
+    @PatchMapping("/{id}/update-info")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ApiResponse<ProductDetailsDTO> updateProductInfo(
+            @PathVariable UUID id,
+            @RequestBody @Valid UpdateProductInfoDTO updateProductInfo) {
+
+        return ApiResponse.<ProductDetailsDTO>builder()
+                .statusCode(204)
+                .message("Successfully")
+                .timestamp(new Date())
+                .data(productService.updateProductInfo(id, updateProductInfo))
+                .build();
+    }
+
+    @PatchMapping("/{id}/add-rating")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ApiResponse<ProductDetailsDTO> addRating(
+            @PathVariable UUID id,
+            @RequestBody @Valid AddRatingProductDTO addRatingProduct) {
+
+        return ApiResponse.<ProductDetailsDTO>builder()
+                .statusCode(204)
+                .message("Successfully")
+                .timestamp(new Date())
+                .data(productService.addRating(id, addRatingProduct))
+                .build();
+    }
+
+    @PatchMapping("/{id}/update-sale-price")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ApiResponse<ProductDetailsDTO> updateSalePrice(
+            @PathVariable UUID id,
+            @RequestBody @Valid UpdateProductPriceDTO updateProductPrice) {
+
+        return ApiResponse.<ProductDetailsDTO>builder()
+                .statusCode(204)
+                .message("Successfully")
+                .timestamp(new Date())
+                .data(productService.updateSalePrice(id, updateProductPrice))
+                .build();
+    }
+
+    @PatchMapping("/{id}/update-state")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ApiResponse<ProductDetailsDTO> updateState(
+            @PathVariable UUID id,
+            @RequestBody @Valid UpdateProductStateDTO updateProductState) {
+
+        return ApiResponse.<ProductDetailsDTO>builder()
+                .statusCode(204)
+                .message("Successfully")
+                .timestamp(new Date())
+                .data(productService.updateState(id, updateProductState))
+                .build();
+    }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ApiResponse<ProductDetailsDTO> deleteProduct(@PathVariable UUID id) {
+        productService.deleteProduct(id);
+
+        return ApiResponse.<ProductDetailsDTO>builder()
+                .statusCode(204)
+                .message("Successfully")
+                .timestamp(new Date())
                 .build();
     }
 }

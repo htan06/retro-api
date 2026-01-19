@@ -34,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new CatalogException(CatalogExceptionEnum.CATEGORY_NOT_FOUND));
 
         Brand brand = brandRepository.findById(createProduct.getBrandId())
-                .orElseThrow(() -> new CatalogException(CatalogExceptionEnum.CATEGORY_NOT_FOUND));
+                .orElseThrow(() -> new CatalogException(CatalogExceptionEnum.BRAND_NOT_FOUND));
 
         Product product = Product.builder()
                 .sku(createProduct.getSku())
@@ -50,10 +50,9 @@ public class ProductServiceImpl implements ProductService {
                 .discount(createProduct.getDiscount())
                 .reviewCount(0)
                 .totalRating(0)
-                .isDelete(false)
                 .build();
 
-        Set<ProductImage> productImages = createProduct.getImageUrl()
+        Set<ProductImage> productImages = createProduct.getImageUrls()
                 .stream()
                 .map(i -> ProductImage.builder()
                         .product(product)
@@ -70,36 +69,82 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDetailsDTO getProductDetails(UUID id) {
-        return null;
+        Product product = productRepository.findByIdAndProductState(id, ProductState.IN_STOCK)
+                .orElseThrow(() -> new CatalogException(CatalogExceptionEnum.PRODUCT_NOT_FOUND));
+
+        return ProductDetailsDTO.from(product);
     }
 
     @Override
     public List<ProductOverviewDTO> getListProductOverview() {
-        return List.of();
+        return productRepository.findAllByProductState(ProductState.IN_STOCK)
+                .stream()
+                .map(ProductOverviewDTO::from)
+                .toList();
     }
 
     @Override
-    public ProductDetailsDTO updateProductInfo(UpdateProductInfoDTO updateProductInfo) {
-        return null;
+    public ProductDetailsDTO updateProductInfo(UUID id, UpdateProductInfoDTO updateProductInfo) {
+        Product product = findProductByStateNotDelete(id);
+
+        product.setProductName(updateProductInfo.getProductName());
+        product.setThumbnail(updateProductInfo.getThumbnail());
+        product.setSummary(updateProductInfo.getSummary());
+        product.setDescriptions(updateProductInfo.getDescriptions());
+
+        return ProductDetailsDTO.from(
+                productRepository.save(product)
+        );
     }
 
     @Override
-    public ProductDetailsDTO addRating(AddRatingProductDTO addRatingProduct) {
-        return null;
+    public ProductDetailsDTO addRating(UUID id, AddRatingProductDTO addRatingProduct) {
+        Product product = findProductByStateNotDelete(id);
+
+        product.addRating(addRatingProduct.getRating());
+
+        return ProductDetailsDTO.from(
+                productRepository.save(product)
+        );
     }
 
     @Override
-    public ProductDetailsDTO updatePrice(UpdateProductPriceDTO updateProductPrice) {
-        return null;
+    public ProductDetailsDTO updateSalePrice(UUID id, UpdateProductPriceDTO updateProductPrice) {
+        Product product = findProductByStateNotDelete(id);
+
+        product.setSalePrice(updateProductPrice.getNewPrice());
+
+        return ProductDetailsDTO.from(
+                productRepository.save(product)
+        );
     }
 
     @Override
-    public ProductDetailsDTO updateState(UpdateProductStateDTO updateProductState) {
-        return null;
+    public ProductDetailsDTO updateState(UUID id, UpdateProductStateDTO updateProductState) {
+        Product product = productRepository.findById(id)
+                        .orElseThrow(() -> new CatalogException(CatalogExceptionEnum.PRODUCT_NOT_FOUND));
+
+        product.setProductState(updateProductState.getState());
+
+        return ProductDetailsDTO.from(
+                productRepository.save(product)
+        );
     }
 
     @Override
     public void deleteProduct(UUID id) {
+        Product product = findProductByStateNotDelete(id);
+        product.setProductState(ProductState.DELETED); //soft delete
+        productRepository.save(product);
+    }
 
+    private Product findProductInStock(UUID id) {
+        return productRepository.findByIdAndProductState(id, ProductState.IN_STOCK)
+                .orElseThrow(() -> new CatalogException(CatalogExceptionEnum.PRODUCT_NOT_FOUND));
+    }
+
+    private Product findProductByStateNotDelete(UUID id) {
+        return productRepository.findByIdAndProductStateNot(id, ProductState.DELETED)
+                .orElseThrow(() -> new CatalogException(CatalogExceptionEnum.PRODUCT_NOT_FOUND));
     }
 }
