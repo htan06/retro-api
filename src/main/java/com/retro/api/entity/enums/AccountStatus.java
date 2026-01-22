@@ -1,6 +1,6 @@
 package com.retro.api.entity.enums;
 
-public enum AccountState {
+public enum AccountStatus {
     ACTIVE,
     LOCKED,
     DELETE

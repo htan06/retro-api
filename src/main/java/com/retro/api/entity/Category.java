@@ -17,9 +17,6 @@ import java.util.Set;
 @NoArgsConstructor
 @SuperBuilder
 public class Category extends BaseEntity {
-    @Column(name = "slug")
-    private String slug;
-
     @Column(name = "category_name")
     private String categoryName;
 

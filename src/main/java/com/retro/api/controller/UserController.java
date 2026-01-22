@@ -19,13 +19,12 @@ public class UserController {
 
     private final UserService userService;
 
-    @PreAuthorize("hasAnyRole('USER', 'MANAGER','ADMIN')")
     @GetMapping
     public ApiResponse<UserInfoDTO> getInfo(Principal principal) {
         UserInfoDTO info = userService.getUserInfo(principal.getName());
 
         return ApiResponse.<UserInfoDTO>builder()
-                .statusCode(201)
+                .statusCode(200)
                 .message("Successfully")
                 .timestamp(new Date())
                 .data(info)
@@ -39,7 +38,7 @@ public class UserController {
 
 
         return ApiResponse.<UserInfoDTO>builder()
-                .statusCode(201)
+                .statusCode(204)
                 .message("Successfully")
                 .timestamp(new Date())
                 .data(updatedInfo)

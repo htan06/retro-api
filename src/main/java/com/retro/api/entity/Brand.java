@@ -17,9 +17,6 @@ import java.util.Set;
 @NoArgsConstructor
 @SuperBuilder
 public class Brand extends BaseEntity {
-    @Column(name = "slug")
-    private String slug;
-
     @Column(name = "brand_name")
     private String brandName;
 

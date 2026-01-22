@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
@@ -25,12 +26,17 @@ public class ProductController {
     @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<ProductDetailsDTO> createProduct(@RequestBody @Valid CreateProductDTO createProduct) {
+    public ApiResponse<ProductDetailsDTO> createProduct(
+            @RequestPart(name = "info") @Valid CreateProductDTO createProduct,
+            @RequestPart(name = "thumbnail") MultipartFile thumbnail,
+            @RequestPart(name = "images") List<MultipartFile> images)
+    {
+
         return ApiResponse.<ProductDetailsDTO>builder()
                 .statusCode(201)
                 .message("Successfully")
                 .timestamp(new Date())
-                .data(productService.createProduct(createProduct))
+                .data(productService.createProduct(createProduct, thumbnail, images))
                 .build();
     }
 
@@ -104,15 +110,15 @@ public class ProductController {
     @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     @PatchMapping("/{id}/update-state")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ApiResponse<ProductDetailsDTO> updateState(
+    public ApiResponse<ProductDetailsDTO> updateStatus(
             @PathVariable UUID id,
-            @RequestBody @Valid UpdateProductStateDTO updateProductState) {
+            @RequestBody @Valid UpdateProductStatusDTO updateProductState) {
 
         return ApiResponse.<ProductDetailsDTO>builder()
                 .statusCode(204)
                 .message("Successfully")
                 .timestamp(new Date())
-                .data(productService.updateState(id, updateProductState))
+                .data(productService.updateStatus(id, updateProductState))
                 .build();
     }
 

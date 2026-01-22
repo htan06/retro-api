@@ -60,6 +60,5 @@ public class AuthController {
                 .timestamp(new Date())
                 .data(info)
                 .build();
-
     }
 }

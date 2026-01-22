@@ -32,6 +32,7 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
+        logger.info("Jwt filter");
         String jwtToken = authorization.substring(7);
 
         DecodedJWT tokenDecode = jwtService.verifyToken(TokenType.ACCESS, jwtToken);

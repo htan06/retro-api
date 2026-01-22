@@ -5,7 +5,7 @@ import com.retro.api.dto.brand.response.BrandDTO;
 import com.retro.api.dto.category.response.CategoryDTO;
 import com.retro.api.entity.Product;
 import com.retro.api.entity.ProductImage;
-import com.retro.api.entity.enums.ProductState;
+import com.retro.api.entity.enums.ProductStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,8 +25,6 @@ public class ProductDetailsDTO implements Serializable {
 
     private String sku;
 
-    private String slug;
-
     @JsonProperty("product_name")
     private String productName;
 
@@ -40,8 +38,8 @@ public class ProductDetailsDTO implements Serializable {
 
     private BrandDTO brand;
 
-    @JsonProperty("product_state")
-    private ProductState productState;
+    @JsonProperty("product_status")
+    private ProductStatus productStatus;
 
     @JsonProperty("sale_price")
     private BigDecimal salePrice;
@@ -58,14 +56,13 @@ public class ProductDetailsDTO implements Serializable {
         return new ProductDetailsDTO(
                 product.getId(),
                 product.getSku(),
-                product.getSlug(),
                 product.getProductName(),
                 product.getThumbnail(),
                 product.getSummary(),
                 product.getDescriptions(),
                 CategoryDTO.from(product.getCategory()),
                 BrandDTO.from(product.getBrand()),
-                product.getProductState(),
+                product.getProductStatus(),
                 product.getSalePrice(),
                 product.getDiscount(),
                 product.calAverageRating(),

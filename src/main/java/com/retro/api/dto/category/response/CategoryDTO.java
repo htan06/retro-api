@@ -14,13 +14,11 @@ import java.util.UUID;
 public class CategoryDTO implements Serializable {
     private UUID id;
     private String name;
-    private String slug;
 
     public static CategoryDTO from(Category category) {
         return new CategoryDTO(
                 category.getId(),
-                category.getCategoryName(),
-                category.getSlug()
+                category.getCategoryName()
         );
     }
 }

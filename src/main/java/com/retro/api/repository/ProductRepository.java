@@ -1,7 +1,7 @@
 package com.retro.api.repository;
 
 import com.retro.api.entity.Product;
-import com.retro.api.entity.enums.ProductState;
+import com.retro.api.entity.enums.ProductStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,9 +11,11 @@ import java.util.UUID;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, UUID> {
-    Optional<Product> findByIdAndProductState(UUID id, ProductState state);
+    Optional<Product> findByIdAndProductStatus(UUID id, ProductStatus status);
 
-    Optional<Product> findByIdAndProductStateNot(UUID id, ProductState state);
+    Optional<Product> findByIdAndProductStatusNot(UUID id, ProductStatus status);
 
-    List<Product> findAllByProductState(ProductState state);
+    List<Product> findAllByProductStatus(ProductStatus status);
+
+    boolean existsBySku(String sku);
 }

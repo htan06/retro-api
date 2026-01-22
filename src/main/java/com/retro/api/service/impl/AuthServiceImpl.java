@@ -5,7 +5,7 @@ import com.retro.api.dto.auth.response.UserLoginResponseDTO;
 import com.retro.api.dto.user.request.ChangePasswordDTO;
 import com.retro.api.dto.auth.request.UserRegisterDTO;
 import com.retro.api.dto.user.response.UserInfoDTO;
-import com.retro.api.entity.enums.AccountState;
+import com.retro.api.entity.enums.AccountStatus;
 import com.retro.api.entity.Role;
 import com.retro.api.entity.enums.RoleEnum;
 import com.retro.api.entity.User;
@@ -27,7 +27,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -53,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
                 .username(userRegister.getUsername())
                 .password(hashPassword)
                 .roles(Set.of(role))
-                .accountState(AccountState.ACTIVE)
+                .accountStatus(AccountStatus.ACTIVE)
                 .build();
 
         return UserInfoDTO.from(userRepository.save(user));

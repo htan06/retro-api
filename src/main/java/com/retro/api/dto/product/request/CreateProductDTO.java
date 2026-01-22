@@ -1,7 +1,7 @@
 package com.retro.api.dto.product.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.retro.api.entity.enums.ProductState;
+import com.retro.api.entity.enums.ProductStatus;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 
@@ -38,10 +38,6 @@ public class CreateProductDTO {
     private UUID brandId;
 
     @NotNull
-    @JsonProperty("product_state")
-    private ProductState productState;
-
-    @NotNull
     @DecimalMin("0.00")
     @JsonProperty("sale_price")
     private BigDecimal salePrice;
@@ -49,8 +45,4 @@ public class CreateProductDTO {
     @Min(0)
     @Max(100)
     private int discount;
-
-    @NotNull
-    @JsonProperty("image_urls")
-    private List<@NotBlank String> imageUrls;
 }

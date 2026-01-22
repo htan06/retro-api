@@ -16,8 +16,6 @@ import java.util.UUID;
 public class ProductOverviewDTO {
     private UUID id;
 
-    private String slug;
-
     @JsonProperty("product_name")
     private String productName;
 
@@ -29,7 +27,6 @@ public class ProductOverviewDTO {
     public static ProductOverviewDTO from(Product product) {
         return new ProductOverviewDTO(
                 product.getId(),
-                product.getSlug(),
                 product.getProductName(),
                 product.getThumbnail(),
                 product.calAverageRating()

@@ -1,6 +1,6 @@
 package com.retro.api.entity;
 
-import com.retro.api.entity.enums.ProductState;
+import com.retro.api.entity.enums.ProductStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,9 +21,6 @@ import java.util.Set;
 public class Product extends BaseEntity {
     @Column(name = "sku")
     private String sku;
-
-    @Column(name = "slug")
-    private String slug;
 
     @Column(name = "product_name")
     private String productName;
@@ -46,8 +43,8 @@ public class Product extends BaseEntity {
     private Brand brand;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "product_state")
-    private ProductState productState;
+    @Column(name = "product_status")
+    private ProductStatus productStatus;
 
     @Column(name = "sale_price")
     private BigDecimal salePrice;

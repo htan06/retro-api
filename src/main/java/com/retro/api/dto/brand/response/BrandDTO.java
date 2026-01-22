@@ -14,13 +14,11 @@ import java.util.UUID;
 public class BrandDTO implements Serializable {
     private UUID id;
     private String name;
-    private String slug;
 
     public static BrandDTO from(Brand brand) {
         return new BrandDTO(
                 brand.getId(),
-                brand.getBrandName(),
-                brand.getSlug()
+                brand.getBrandName()
         );
     }
 }

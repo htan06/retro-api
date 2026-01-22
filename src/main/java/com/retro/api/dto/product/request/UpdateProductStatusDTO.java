@@ -1,11 +1,11 @@
 package com.retro.api.dto.product.request;
 
-import com.retro.api.entity.enums.ProductState;
+import com.retro.api.entity.enums.ProductStatus;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
-public class UpdateProductStateDTO {
+public class UpdateProductStatusDTO {
     @NotNull
-    private ProductState state;
+    private ProductStatus status;
 }

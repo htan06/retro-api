@@ -1,6 +1,6 @@
 package com.retro.api.entity;
 
-import com.retro.api.entity.enums.AccountState;
+import com.retro.api.entity.enums.AccountStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -37,9 +37,9 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "account_state")
+    @Column(name = "account_status")
     @Enumerated(EnumType.STRING)
-    private AccountState accountState;
+    private AccountStatus accountStatus;
 
     @ManyToMany
     @JoinTable(
@@ -56,6 +56,6 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return this.accountState == AccountState.ACTIVE;
+        return this.accountStatus == AccountStatus.ACTIVE;
     }
 }
