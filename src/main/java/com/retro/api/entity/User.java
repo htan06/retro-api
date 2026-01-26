@@ -58,4 +58,9 @@ public class User extends BaseEntity implements UserDetails {
     public boolean isAccountNonLocked() {
         return this.accountStatus == AccountStatus.ACTIVE;
     }
+
+    @Override
+    public boolean isEnabled() {
+        return this.accountStatus == AccountStatus.ACTIVE;
+    }
 }

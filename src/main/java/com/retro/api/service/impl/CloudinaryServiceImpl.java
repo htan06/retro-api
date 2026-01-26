@@ -35,6 +35,10 @@ public class CloudinaryServiceImpl implements CloudinaryService {
             throw new IllegalArgumentException("File %s not a image".formatted(file.getName()));
         }
 
+        if (file.getSize() > 2000000) {
+            throw new IllegalArgumentException("The file size must be less than 2 MB");
+        }
+
         try {
             Map uploadResponse = cloudinary.uploader().uploadLarge(file.getInputStream(), Map.of());
             return uploadResponse.get("secure_url").toString();
