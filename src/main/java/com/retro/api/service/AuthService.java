@@ -13,7 +13,7 @@ public interface AuthService {
 
     UserLoginResponseDTO login(UserLoginDTO userLogin);
 
-    UserInfoDTO changePassword(String username, ChangePasswordDTO changePassword);
+    UserInfoDTO changePassword(UUID id, ChangePasswordDTO changePassword);
 
     void lockUser(UUID id);
 

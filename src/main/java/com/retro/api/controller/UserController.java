@@ -7,10 +7,11 @@ import com.retro.api.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.Date;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/user-info")
@@ -20,8 +21,8 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ApiResponse<UserInfoDTO> getInfo(Principal principal) {
-        UserInfoDTO info = userService.getUserInfo(principal.getName());
+    public ApiResponse<UserInfoDTO> getInfo(@AuthenticationPrincipal(expression = "id") UUID id) {
+        UserInfoDTO info = userService.getUserInfo(id);
 
         return ApiResponse.<UserInfoDTO>builder()
                 .statusCode(200)
@@ -33,9 +34,11 @@ public class UserController {
 
     @PreAuthorize("hasAnyRole('USER', 'MANAGER','ADMIN')")
     @PatchMapping
-    public ApiResponse<UserInfoDTO> updateInfo(Principal principal, @RequestBody @Valid UpdateUserInfoDTO updateUserInfo) {
-        UserInfoDTO updatedInfo = userService.updateUserInfo(principal.getName(), updateUserInfo);
-
+    public ApiResponse<UserInfoDTO> updateInfo(
+            @AuthenticationPrincipal(expression = "id") UUID id,
+            @RequestBody @Valid UpdateUserInfoDTO updateUserInfo)
+    {
+        UserInfoDTO updatedInfo = userService.updateUserInfo(id, updateUserInfo);
 
         return ApiResponse.<UserInfoDTO>builder()
                 .statusCode(204)

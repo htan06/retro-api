@@ -80,9 +80,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserInfoDTO changePassword(String username, ChangePasswordDTO changePassword) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new IdentityException(IdentityExceptionEnum.USER_NOT_FOUND));
+    public UserInfoDTO changePassword(UUID id, ChangePasswordDTO changePassword) {
+        User user = userRepository.getReferenceById(id);
 
         boolean matchCurrentPassword = passwordEncoder.matches(changePassword.getCurrentPassword(), user.getPassword());
 

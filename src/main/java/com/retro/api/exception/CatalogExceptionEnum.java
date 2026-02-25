@@ -29,7 +29,9 @@ public enum CatalogExceptionEnum {
     COLOR_HEX_INVALID("Hexadecimal color codes must begin with the '#' character and have exactly 3 or 6 characters."),
 
     SIZE_NOT_FOUND("Size not found."),
-    SIZE_NAME_INVALID("Size name must be not blank");
+    SIZE_NAME_INVALID("Size name must be not blank"),
+
+    CART_ITEM_NOT_FOUD("Cart item not found");
 
     private String message;
 

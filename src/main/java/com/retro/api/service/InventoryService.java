@@ -6,5 +6,5 @@ import com.retro.api.dto.inventory.response.InventoryDTO;
 import java.util.UUID;
 
 public interface InventoryService {
-    InventoryDTO update(UUID id, String managerUsername, RequestInventoryDTO requestInventory);
+    InventoryDTO update(UUID id, UUID actorId, RequestInventoryDTO requestInventory);
 }

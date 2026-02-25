@@ -41,6 +41,9 @@ public class User extends BaseEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
 
+    @OneToMany(mappedBy = "user")
+    private Set<CartItem> cartItems;
+
     @ManyToMany
     @JoinTable(
             name = "user_has_roles",

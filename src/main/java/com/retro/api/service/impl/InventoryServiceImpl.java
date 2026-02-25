@@ -4,6 +4,7 @@ import com.retro.api.dto.inventory.request.RequestInventoryDTO;
 import com.retro.api.dto.inventory.response.InventoryDTO;
 import com.retro.api.entity.Inventory;
 import com.retro.api.repository.InventoryRepository;
+import com.retro.api.repository.UserRepository;
 import com.retro.api.service.InventoryService;
 import com.retro.api.service.InventoryTransactionService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     @Transactional
-    public InventoryDTO update(UUID id, String managerUsername, RequestInventoryDTO requestInventory) {
+    public InventoryDTO update(UUID id, UUID actorId, RequestInventoryDTO requestInventory) {
         Inventory inventory = inventoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Inventory not found"));
 
@@ -33,7 +34,7 @@ public class InventoryServiceImpl implements InventoryService {
         }
 
         inventoryTransactionService.addTransaction(
-                managerUsername,
+                actorId,
                 requestInventory.getTransactionType(),
                 inventory.getProduct().getId(),
                 requestInventory.getQuantity());

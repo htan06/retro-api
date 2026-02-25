@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -25,7 +26,7 @@ public class InventoryController {
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ApiResponse<InventoryDTO> update(
-            Principal principal,
+            @AuthenticationPrincipal(expression = "id") UUID userId,
             @PathVariable(name = "id") UUID id,
             @RequestBody @Valid RequestInventoryDTO requestInventory) {
 
@@ -33,7 +34,7 @@ public class InventoryController {
                 .statusCode(204)
                 .message("Successfully")
                 .timestamp(new Date())
-                .data(inventoryService.update(id, principal.getName(), requestInventory))
+                .data(inventoryService.update(id, id, requestInventory))
                 .build();
     }
 }

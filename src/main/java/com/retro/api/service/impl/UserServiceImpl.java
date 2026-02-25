@@ -11,6 +11,8 @@ import com.retro.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -18,14 +20,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public UserInfoDTO getUserInfo(String username) {
-        User user = findUserActiveByUsername(username);
+    public UserInfoDTO getUserInfo(UUID id) {
+        User user = findUserActiveById(id);
         return UserInfoDTO.from(user);
     }
 
     @Override
-    public UserInfoDTO updateUserInfo(String username, UpdateUserInfoDTO updateUserInfo) {
-        User user = findUserActiveByUsername(username);
+    public UserInfoDTO updateUserInfo(UUID id, UpdateUserInfoDTO updateUserInfo) {
+        User user = findUserActiveById(id);
 
         user.setFirstName(updateUserInfo.getFirstName());
         user.setLastName(updateUserInfo.getLastName());
@@ -35,8 +37,8 @@ public class UserServiceImpl implements UserService {
         );
     }
 
-    private User findUserActiveByUsername(String username) {
-        return userRepository.findByUsernameAndAccountStatus(username, AccountStatus.ACTIVE)
+    private User findUserActiveById(UUID id) {
+        return userRepository.findByIdAndAccountStatus(id, AccountStatus.ACTIVE)
                 .orElseThrow(() -> new IdentityException(IdentityExceptionEnum.USER_NOT_FOUND));
     }
 }

@@ -12,6 +12,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -22,6 +24,7 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -35,12 +38,22 @@ public class JwtFilter extends OncePerRequestFilter {
         logger.info("Jwt filter");
         String jwtToken = authorization.substring(7);
 
-        DecodedJWT tokenDecode = jwtService.verifyToken(TokenType.ACCESS, jwtToken);
+        DecodedJWT tokenDecode;
+
+        try {
+             tokenDecode = jwtService.verifyToken(TokenType.ACCESS, jwtToken);
+        } catch (Exception e) {
+            response.setStatus(401);
+            response.setContentType("application/json");
+            response.getWriter().print("{\"error\":\"Unauthorized\"}");
+            return;
+        }
 
         SecurityContext context = SecurityContextHolder.createEmptyContext();
+        UserDetails userDetails = userDetailsService.loadUserByUsername(tokenDecode.getSubject());
 
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                tokenDecode.getSubject(),
+                userDetails,
                 jwtToken,
                 tokenDecode.getClaim("roles").asList(String.class)
                         .stream()

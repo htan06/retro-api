@@ -24,9 +24,8 @@ public class InventoryTransactionServiceImpl implements InventoryTransactionServ
     private final ProductRepository productRepository;
 
     @Override
-    public void addTransaction(String actorUsername, TransactionType transactionType, UUID productId, long quantity) {
-        User userActor = userRepository.findByUsername(actorUsername)
-                .orElseThrow(() -> new IdentityException(IdentityExceptionEnum.USER_NOT_FOUND));
+    public void addTransaction(UUID actorId, TransactionType transactionType, UUID productId, long quantity) {
+        User userActor = userRepository.getReferenceById(actorId);
 
         InventoryTransaction inventoryTransaction = InventoryTransaction.builder()
                 .user(userActor)
