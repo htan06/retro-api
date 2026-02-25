@@ -1,18 +1,22 @@
 package com.retro.api.service;
 
+import com.retro.api.dto.cart.respoonse.CartItemResponse;
 import com.retro.api.entity.CartItem;
 import com.retro.api.entity.User;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface CartService {
-    CartItem addToCart(User user, UUID productId);
+    List<CartItemResponse> getCart(UUID userId);
 
-    CartItem increaseQuantity(User user, UUID itemId, int quantity);
+    CartItemResponse addToCart(UUID userId, UUID productId);
 
-    CartItem decreaseQuantity(User user, UUID itemId, int quantity);
+    CartItemResponse increaseQuantity(UUID userId, UUID itemId, int quantity);
 
-    void removeItem(User user, UUID itemId);
+    CartItemResponse decreaseQuantity(UUID userId, UUID itemId, int quantity);
 
-    void removeAllItem(User user);
+    void removeItem(UUID userId, UUID itemId);
+
+    void removeAllItem(UUID userId);
 }

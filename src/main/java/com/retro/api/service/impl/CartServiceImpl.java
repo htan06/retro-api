@@ -1,5 +1,6 @@
 package com.retro.api.service.impl;
 
+import com.retro.api.dto.cart.respoonse.CartItemResponse;
 import com.retro.api.entity.CartItem;
 import com.retro.api.entity.User;
 import com.retro.api.exception.CatalogException;
@@ -8,9 +9,12 @@ import com.retro.api.repository.CartItemRepository;
 import com.retro.api.repository.ProductRepository;
 import com.retro.api.repository.UserRepository;
 import com.retro.api.service.CartService;
+import com.retro.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -22,55 +26,65 @@ public class CartServiceImpl implements CartService {
     private final UserRepository userRepository;
 
     @Override
-    public CartItem addToCart(User user, UUID productId) {
+    public List<CartItemResponse> getCart(UUID userId) {
+        return cartItemRepository.findAllByUserId(userId)
+                .stream()
+                .map(CartItemResponse::from)
+                .toList();
+    }
+
+    @Override
+    public CartItemResponse addToCart(UUID userId, UUID productId) {
         try {
-            CartItem item = cartItemRepository.findByProductId(productId)
+            CartItem item = cartItemRepository.findByUserIdAndProductId(userId, productId)
                     .orElseThrow(() -> new CatalogException(CatalogExceptionEnum.CART_ITEM_NOT_FOUD));
 
             item.setQuantity(item.getQuantity() + 1);
-            cartItemRepository.save(item);
-            return item;
+            return CartItemResponse.from(
+                cartItemRepository.save(item));
+
         } catch (Exception e) {
             CartItem item = CartItem.builder()
-                    .user(user)
+                    .user(userRepository.getReferenceById(userId))
                     .product(productRepository.getReferenceById(productId))
+                    .quantity(1)
                     .build();
 
-            user.getCartItems().add(item);
-            userRepository.save(user);
-            return item;
+            return CartItemResponse.from(
+                    cartItemRepository.save(item));
         }
     }
 
     @Override
-    public CartItem increaseQuantity(User user, UUID itemId, int quantity) {
-        CartItem item = cartItemRepository.findByIdAndUserId(itemId, user.getId())
+    public CartItemResponse increaseQuantity(UUID userId, UUID itemId, int quantity) {
+        CartItem item = cartItemRepository.findByIdAndUserId(itemId, userId)
                 .orElseThrow(() -> new CatalogException(CatalogExceptionEnum.CART_ITEM_NOT_FOUD));
 
         item.setQuantity(item.getQuantity() + 1);
-        cartItemRepository.save(item);
-        return item;
+        return CartItemResponse.from(
+                cartItemRepository.save(item));
     }
 
     @Override
-    public CartItem decreaseQuantity(User user, UUID itemId, int quantity) {
-        CartItem item = cartItemRepository.findByIdAndUserId(itemId, user.getId())
+    public CartItemResponse decreaseQuantity(UUID userId, UUID itemId, int quantity) {
+        CartItem item = cartItemRepository.findByIdAndUserId(itemId, userId)
                 .orElseThrow(() -> new CatalogException(CatalogExceptionEnum.CART_ITEM_NOT_FOUD));
 
         item.setQuantity(item.getQuantity() - 1);
-        cartItemRepository.save(item);
-        return item;
+        return CartItemResponse.from(
+                cartItemRepository.save(item));
     }
 
     @Override
-    public void removeItem(User user, UUID itemId) {
-        CartItem item = cartItemRepository.findByIdAndUserId(itemId, user.getId())
+    public void removeItem(UUID userId, UUID itemId) {
+        CartItem item = cartItemRepository.findByIdAndUserId(itemId, userId)
                 .orElseThrow(() -> new CatalogException(CatalogExceptionEnum.CART_ITEM_NOT_FOUD));
         cartItemRepository.delete(item);
     }
 
     @Override
-    public void removeAllItem(User user) {
-        cartItemRepository.deleteAllByUser(user);
+    @Transactional
+    public void removeAllItem(UUID userId) {
+        cartItemRepository.deleteAllByUser(userRepository.getReferenceById(userId));
     }
 }

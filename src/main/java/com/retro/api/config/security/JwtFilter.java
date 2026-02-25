@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.security.sasl.AuthenticationException;
 import java.io.IOException;
 
 @Component
@@ -39,9 +40,14 @@ public class JwtFilter extends OncePerRequestFilter {
         String jwtToken = authorization.substring(7);
 
         DecodedJWT tokenDecode;
+        UserDetails userDetails;
 
         try {
              tokenDecode = jwtService.verifyToken(TokenType.ACCESS, jwtToken);
+             userDetails = userDetailsService.loadUserByUsername(tokenDecode.getSubject());
+             if (!userDetails.isAccountNonLocked()) {
+                 throw new AuthenticationException("The account has been locked");
+             }
         } catch (Exception e) {
             response.setStatus(401);
             response.setContentType("application/json");
@@ -50,17 +56,17 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         SecurityContext context = SecurityContextHolder.createEmptyContext();
-        UserDetails userDetails = userDetailsService.loadUserByUsername(tokenDecode.getSubject());
 
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                 userDetails,
-                jwtToken,
+                null,
                 tokenDecode.getClaim("roles").asList(String.class)
                         .stream()
                         .map(SimpleGrantedAuthority::new)
                         .toList()
         );
 
+        authentication.eraseCredentials();
         context.setAuthentication(authentication);
         SecurityContextHolder.setContext(context);
 

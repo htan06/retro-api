@@ -4,6 +4,7 @@ import com.retro.api.entity.enums.AccountStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
-public class User extends BaseEntity implements UserDetails {
+public class User extends BaseEntity implements UserDetails, CredentialsContainer {
     @Column(name = "first_name")
     private String firstName;
 
@@ -65,5 +66,10 @@ public class User extends BaseEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return this.accountStatus == AccountStatus.ACTIVE;
+    }
+
+    @Override
+    public void eraseCredentials() {
+        this.password = null;
     }
 }

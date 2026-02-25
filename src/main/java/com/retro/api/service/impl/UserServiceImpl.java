@@ -21,13 +21,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserInfoDTO getUserInfo(UUID id) {
-        User user = findUserActiveById(id);
+        User user = findUserById(id);
         return UserInfoDTO.from(user);
     }
 
     @Override
     public UserInfoDTO updateUserInfo(UUID id, UpdateUserInfoDTO updateUserInfo) {
-        User user = findUserActiveById(id);
+        User user = findUserById(id);
 
         user.setFirstName(updateUserInfo.getFirstName());
         user.setLastName(updateUserInfo.getLastName());
@@ -37,8 +37,9 @@ public class UserServiceImpl implements UserService {
         );
     }
 
-    private User findUserActiveById(UUID id) {
-        return userRepository.findByIdAndAccountStatus(id, AccountStatus.ACTIVE)
+    @Override
+    public User findUserById(UUID id) {
+        return userRepository.findById(id)
                 .orElseThrow(() -> new IdentityException(IdentityExceptionEnum.USER_NOT_FOUND));
     }
 }
